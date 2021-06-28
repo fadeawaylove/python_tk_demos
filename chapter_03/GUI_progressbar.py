@@ -1,7 +1,8 @@
 """
-菜单栏 tooltip
+菜单栏 进度条
 """
 import tkinter as tk
+from time import sleep
 from tkinter import ttk
 from tkinter import scrolledtext
 from tkinter import Menu
@@ -175,12 +176,40 @@ for i in range(3):
     crad = tk.Radiobutton(mighty2, text=colors[i], variable=rad_var, value=i + 1, command=rad_call)
     crad.grid(column=i, row=3, sticky=tk.W, columnspan=3)
 
-# Label Frame
-label_frame = ttk.LabelFrame(mighty2, text="Labels in a Frame")
-label_frame.grid(column=0, row=7, padx=20, pady=40)  # padx pady设置外边距
+progress_bar = ttk.Progressbar(tab2, orient="horizontal", length=286, mode="determinate", )
+progress_bar.grid(column=0, row=10, pady=2)
 
-ttk.Label(label_frame, text="Label1").grid(column=0, row=0, )
-ttk.Label(label_frame, text="Label2").grid(column=1, row=0, )
-ttk.Label(label_frame, text="Label3").grid(column=2, row=0, )
+
+def run_progressbar():
+    progress_bar["maximum"] = 100
+    for i in range(101):
+        sleep(0.5)
+        progress_bar["value"] = i
+        progress_bar.update()
+    progress_bar["value"] = 0
+
+
+def start_progressbar():
+    progress_bar.start()
+
+
+def stop_progressbar():
+    progress_bar.stop()
+
+
+def progress_bar_stop_after(wait_ms=1000):
+    win.after(wait_ms, progress_bar.stop())
+
+
+# Label Frame
+button_frame = ttk.LabelFrame(mighty2, text="Labels in a Frame")
+button_frame.grid(column=0, row=3, padx=20, pady=40)  # padx pady设置外边距
+
+ttk.Button(button_frame, text="Run Progressbar", command=run_progressbar).grid(column=0, row=5)
+ttk.Button(button_frame, text="Start Progressbar", command=start_progressbar).grid(column=0, row=6)
+ttk.Button(button_frame, text="Stop Immediately", command=stop_progressbar).grid(column=0, row=7)
+ttk.Button(button_frame, text="Stop After Second", command=progress_bar_stop_after).grid(column=0, row=8)
+
+
 
 win.mainloop()
